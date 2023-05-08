@@ -140,7 +140,7 @@ export class HomeComponent implements OnInit {
   @HostListener('window:beforeunload')
   onBeforeUnload() {
     if (!this.isFinished) {
-      this.saveTime();
+      this.onQuit();
     }
   }
 
@@ -152,7 +152,7 @@ export class HomeComponent implements OnInit {
     const gameStarted = localStorage.getItem('gameStarted');
 
     if (storedCurrentQuestion && storedMyResponses) {
-      this.currentQuestion = parseInt(storedCurrentQuestion) + 1;
+      this.currentQuestion = parseInt(storedCurrentQuestion);
       this.myResponses = JSON.parse(storedMyResponses);
     } else {
       // initialisation de myResponses
@@ -181,13 +181,6 @@ export class HomeComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.myResponses[this.currentQuestion].selectedResponse !== '') {
-      this.myResponses[this.currentQuestion].answered = true;
-    }
-
-    localStorage.setItem('currentQuestion', this.currentQuestion.toString());
-    localStorage.setItem('myResponses', JSON.stringify(this.myResponses));
-
     if (this.currentQuestion + 1 == this.questions.length) {
       this.gameStarted = false;
       this.isFinished = true;
@@ -209,7 +202,7 @@ export class HomeComponent implements OnInit {
 
   countGoodResponse() {
     return this.myResponses.reduce((count, response, i) => {
-      if (response.answered && response.selectedResponse === this.questions[i].correctOption) {
+      if (response.selectedResponse === this.questions[i].correctOption) {
         count++;
       }
       return count;
@@ -232,9 +225,11 @@ export class HomeComponent implements OnInit {
     }, 1000);
   }
 
-  private saveTime() {
+  private onQuit() {
     const time = {minutes: this.minutes, seconds: this.seconds};
     localStorage.setItem('counterTime', JSON.stringify(time));
+    localStorage.setItem('currentQuestion', this.currentQuestion.toString());
+    localStorage.setItem('myResponses', JSON.stringify(this.myResponses));
   }
 
   private clearLocalStorage() {
@@ -248,8 +243,7 @@ export class HomeComponent implements OnInit {
     for (let i = 0; i < this.totalQuestions; i++) {
       this.myResponses.push({
         id: i,
-        selectedResponse: "",
-        answered: false
+        selectedResponse: ""
       });
     }
   }

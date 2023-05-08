@@ -10,7 +10,7 @@
         </li>
         <li>Si vous ne parvenez pas à terminer le questionnaire avant la fin du temps imparti, seules les réponses que vous avez validées seront prises en compte.
         </li>
-        <li>Les questions validées (non vide) seront indiquées en bleu en temps réel..
+        <li>Les questions répondues seront indiquées en bleu en temps réel..
         </li>
       </ul>
     </div>
@@ -35,20 +35,20 @@
     <div class="mt-3">
       <a class="btn btn-outline-info me-2" (click)="goToPrevious()">⏮️ Question Précédente</a>
       <button type="submit" class="btn btn-outline-info">
-        {{ currentQuestion + 1 < totalQuestions ? "Question Suivante (validation) ⏭️" : "Terminer le QCM" }}
+        {{ currentQuestion + 1 < totalQuestions ? "Valider ma réponse ⏭️" : "Terminer le QCM" }}
       </button>
 
     </div>
     <div class="mt-3">
       <div *ngFor="let myResponse of myResponses" class="parent-div mt-3">
         <span (click)="goToQuestion(myResponse.id)" class="ms-1 alert list-response"
-              [ngClass]="!myResponse.answered || !myResponse.selectedResponse ? 'alert alert-danger' : 'alert alert-info'"
+              [ngClass]="!myResponse.selectedResponse ? 'alert alert-danger' : 'alert alert-info'"
               [ngStyle]="{ 'border': myResponse.id === currentQuestion ? '2px solid black' : '' }">
           Question {{myResponse.id + 1}}
         </span>
       </div>
     </div>
-    <em class="mt-4"><b>NB</b> : Les questions qui sont validées apparaissent en bleu (il es biensur possible de modifier leurs valeurs)</em>
+    <em class="mt-4"><b>NB</b> : Les questions qui sont répondues apparaissent en bleu (il es biensur possible de modifier leurs valeurs)</em>
   </form>
 
 
@@ -76,8 +76,8 @@
               <div class="alert alert-success">{{question.correctOption}}</div>
               Votre Réponse :
               <div
-                [ngClass]="myResponses[question.id-1].selectedResponse === question.correctOption && myResponses[question.id -1].answered  ? 'alert alert-success' : 'alert alert-danger'">
-                {{!myResponses[question.id - 1].selectedResponse  || !myResponses[question.id -1].answered ? "Aucune réponse" : myResponses[question.id - 1].selectedResponse}}
+                [ngClass]="myResponses[question.id-1].selectedResponse === question.correctOption ? 'alert alert-success' : 'alert alert-danger'">
+                {{!myResponses[question.id - 1].selectedResponse  ? "Aucune réponse" : myResponses[question.id - 1].selectedResponse}}
               </div>
             </div>
           </div>
